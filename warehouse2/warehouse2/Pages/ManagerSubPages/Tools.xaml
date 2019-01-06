@@ -29,9 +29,9 @@
             <RowDefinition Height="Auto" SharedSizeGroup="InputHeight"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ComboBox x:Name="comboBoxToolsFilter" Margin="5,5,5,5.2" FontSize="15" Width="110" SelectionChanged="comboBoxToolsFilter_SelectionChanged"/>
+        <ComboBox x:Name="comboBoxToolsFilter" SelectedItem="{Binding SelectedFilter}" ItemsSource="{Binding KindsDDL}" DisplayMemberPath="KindName" Margin="5,5,5,5.2" FontSize="15" Width="110"/>
         <Button x:Name="buttonAddComp" Content="הוסף לתחרות" Grid.Column="4" Margin="5.2,5.2,4.8,5" FontSize="15" Grid.ColumnSpan="2"  Visibility="{Binding NeedComp, Converter={StaticResource b2v}}" Click="buttonAddComp_Click"/>
-        <DataGrid x:Name="dataGridTools" ItemsSource="{Binding SharedDataIns.ToolsList}" SelectionChanged="dataGridTools_SelectionChanged" Margin="5,4.8,4.8,5.2" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="5" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False" MaxHeight="445">
+        <DataGrid x:Name="dataGridTools" ItemsSource="{Binding ToolsList}" SelectionChanged="dataGridTools_SelectionChanged" Margin="5,4.8,4.8,5.2" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="5" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False" MaxHeight="445">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding KindName}" Header="סוג כלי" MinWidth="90">
                     <!--      <DataGridTextColumn.CellStyle>
@@ -89,12 +89,12 @@
             </Button.Style>
         </Button>
         <Button x:Name="buttonChangeKind" Content="שינוי סוג" Grid.Column="4" Margin="5.2,5.4,4.8,4.8" Grid.Row="3" FontSize="15" Click="buttonChangeKind_Click"/>
-        <ComboBox x:Name="comboBoxChangeKind" Margin="5.2,5.4,4.8,4.8" FontSize="15" Grid.Row="3" Grid.Column="5"/>
+        <ComboBox x:Name="comboBoxChangeKind" SelectedItem="{Binding SelectedChanging}" ItemsSource="{Binding KindsDDL}" DisplayMemberPath="KindName" Margin="5.2,5.4,4.8,4.8" FontSize="15" Grid.Row="3" Grid.Column="5"/>
         <Button x:Name="buttonPrintToolBarcode" Content="הדפס ברקוד" Grid.Column="4" Margin="5.2,5.2,4.8,5" Grid.Row="4" FontSize="15" Grid.ColumnSpan="2"/>
         <TextBlock x:Name="textBlockAddToolTitle" Grid.Column="6" Margin="25,5,20,5" TextWrapping="Wrap" Text="הוספת כלי" Grid.ColumnSpan="2" FontSize="16" TextAlignment="Center"/>
         <GridSplitter Grid.Column="6" HorizontalAlignment="Left" Margin="5,0,0,0" Width="2" Grid.RowSpan="6" Background="LightGray"/>
-        <ComboBox x:Name="comboBoxAddToolKind" Margin="25,5,20,5" FontSize="15" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" ToolTip="סוג כלי"/>
-        <TextBox x:Name="textBoxAddToolName" Grid.ColumnSpan="2" Grid.Column="6" Margin="25,5,20,5" Grid.Row="2" TextWrapping="Wrap" FontSize="15" ToolTip="שם כלי"/>
+        <ComboBox x:Name="comboBoxAddToolKind" SelectedItem="{Binding SelectedAdding}" ItemsSource="{Binding KindsDDL}" DisplayMemberPath="KindName" Margin="25,5,20,5" FontSize="15" Grid.Column="6" Grid.Row="1" Grid.ColumnSpan="2" ToolTip="סוג כלי"/>
+        <TextBox x:Name="textBoxAddToolName" Text="{Binding ToolName}" Grid.ColumnSpan="2" Grid.Column="6" Margin="25,5,20,5" Grid.Row="2" TextWrapping="Wrap" FontSize="15" ToolTip="שם כלי"/>
         <TextBlock Grid.Column="6" IsHitTestVisible="False" TextWrapping="Wrap" Text="שם" Margin="25,5,20,5" Foreground="DarkGray" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2" Grid.Row="2">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
@@ -107,13 +107,13 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <TextBox x:Name="textBoxAddToolNumber" Margin="25,5,20,5" FontSize="15" Grid.Row="3" Grid.Column="6" Grid.ColumnSpan="2" ToolTip="מספר כלי"/>
+        <TextBox x:Name="textBoxAddToolNumber" Text="{Binding Numberring}" Margin="25,5,20,5" FontSize="15" Grid.Row="3" Grid.Column="6" Grid.ColumnSpan="2" ToolTip="מספר כלי"/>
         <TextBlock Grid.Column="6" IsHitTestVisible="False" TextWrapping="Wrap" Text="מספר כלי" Margin="25,5,20,5" Foreground="DarkGray" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2" Grid.Row="3">
             <TextBlock.Style>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Text, ElementName=textBoxAddToolName}" Value="">
+                        <DataTrigger Binding="{Binding Text, ElementName=textBoxAddToolNumber}" Value="">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>

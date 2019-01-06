@@ -93,6 +93,7 @@ namespace warehouse2 {
             set {
                 this.kindsList = value;
                 OnPropertyChanged("KindsList");
+                OnPropertyChanged("KindsDDL");
             }
         }
         public ObservableCollection<ToolDets> ToolsList {

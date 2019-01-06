@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,11 @@ namespace warehouse2 {
             }
         }
         SharedData sharedDataIns;
+        KindDets selectedFilter;
+        KindDets selectedAdding;
+        KindDets selectedChanging;
+        string toolName;
+        string numberring;
         public SharedData SharedDataIns {
             get { return sharedDataIns; }
             set {
@@ -34,6 +40,62 @@ namespace warehouse2 {
                 OnPropertyChanged("SharedDataIns");
             }
         }
+        public ObservableCollection<ToolDets> ToolsList {
+            get {
+                ObservableCollection<ToolDets> list;
+                if (SelectedFilter.KindID == -1) {
+                    list = new ObservableCollection<ToolDets>(SharedData.GetInstans().ToolsList);
+                } else {
+                    list = new ObservableCollection<ToolDets>(SharedData.GetInstans().ToolsList.Where((e) => e.KindID == SelectedFilter.KindID));
+                }
+                return list;
+            }
+        }
+        public ObservableCollection<KindDets> KindsDDL {
+            get {
+                ObservableCollection<KindDets> list = new ObservableCollection<KindDets>(SharedData.GetInstans().KindsList);
+                list.Insert(0, new KindDets { KindName = "בחר סוג", KindID = -1, Enabled = true });
+                return list;
+            }
+        }
+        public KindDets SelectedFilter {
+            get { return (this.selectedFilter != null ? this.selectedFilter : new KindDets { KindName = "בחר סוג", KindID = -1, Enabled = true }); }
+            set {
+                this.selectedFilter = value;
+                OnPropertyChanged("SelectedFilter");
+                OnPropertyChanged("ToolsList");
+            }
+        }
+        public KindDets SelectedAdding {
+            get { return (this.selectedAdding != null ? this.selectedAdding : new KindDets { KindName = "בחר סוג", KindID = -1, Enabled = true }); }
+            set {
+                this.selectedAdding = value;
+                OnPropertyChanged("SelectedAdding");
+            }
+        }
+        public KindDets SelectedChanging {
+            get { return (this.selectedChanging != null ? this.selectedChanging : new KindDets { KindName = "בחר סוג", KindID = -1, Enabled = true }); }
+            set {
+                this.selectedChanging = value;
+                OnPropertyChanged("SelectedChanging");
+            }
+        }
+        public string ToolName {
+            get { return (this.toolName != null ? this.toolName : ""); }
+            set {
+                this.toolName = value;
+                OnPropertyChanged("ToolName");
+            }
+        }
+        public string Numberring {
+            get { return (this.numberring != null ? this.numberring : ""); }
+            set {
+                this.numberring = value;
+                OnPropertyChanged("Numberring");
+            }
+        }
+
+
 
         public bool NeedLost {
             get { return ((this.dataGridTools.SelectedItems.Cast<ToolDets>().Where((e) => e.Enabled == true)).ToList().Count > 0); }
@@ -78,11 +140,13 @@ namespace warehouse2 {
         }
 
         private void buttonAddTool_Click(object sender, RoutedEventArgs e) {
-
-        }
-
-        private void comboBoxToolsFilter_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-
+            if (ToolName != "" && SelectedAdding.KindID != -1) {
+                ToolService.AddTool(ToolName, Numberring, SelectedAdding.KindID);
+                ToolName = null;
+                Numberring = null;
+                this.comboBoxAddToolKind.SelectedIndex = 0;
+                sharedDataIns.refreshData(TYPE.TOOL);
+            }
         }
     }
 }
