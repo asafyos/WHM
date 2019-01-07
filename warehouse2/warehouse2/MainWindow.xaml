@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Menu x:Name="menu" Margin="0">
             <MenuItem Header="מחסנאי">
-                <ComboBox ItemsSource="{Binding SharedDataIns.StorekeepersList}" DisplayMemberPath="MemberName"/>
+                <ComboBox ItemsSource="{Binding StorekeepersList}" DisplayMemberPath="MemberName" SelectedItem="{Binding SharedDataIns.currentStorekeeper}"/>
             </MenuItem>
             <MenuItem Header="מנהל">
                 <MenuItem Header="היכנס" Click="MenuItem_LogIn_Click" IsEnabled="{Binding ManagerIn, Converter={StaticResource boolInverter}}"/>
