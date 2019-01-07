@@ -19,7 +19,9 @@ namespace warehouse2 {
         MNGR
     }
 
+
     public class SharedData : INotifyPropertyChanged {
+        const int TeamStart = 2005;
         const int buildrsID = 2;
 
         // INotifyPropertyChanged
@@ -43,6 +45,7 @@ namespace warehouse2 {
         ObservableCollection<ManagerDets> managersList;
         ManagerDets currentManager;
         MemberDets currentStorekeeper;
+        ObservableCollection<DateTime> yDates;
 
         // Properties
         public ObservableCollection<LoanedTool> OutToolList {
@@ -78,6 +81,7 @@ namespace warehouse2 {
             set {
                 this.groupsList = value;
                 OnPropertyChanged("GroupsList");
+                OnPropertyChanged("GroupsDDL");
             }
         }
         public ObservableCollection<MemberDets> MembersList {
@@ -136,6 +140,13 @@ namespace warehouse2 {
                 OnPropertyChanged("CurrentStorekeeper");
             }
         }
+        public ObservableCollection<DateTime> YDates {
+            get { return this.yDates; }
+            set {
+                this.yDates = value;
+                OnPropertyChanged("YDates");
+            }
+        }
 
         // Ctor
         private SharedData() {
@@ -177,7 +188,18 @@ namespace warehouse2 {
             if (type == TYPE.ALL || type == TYPE.MNGR) {
                 ManagersList = UserService.GetAllMenegers();
             }
+            if (type == TYPE.ALL) {
+                setDates();
+            }
         }
 
+        private void setDates() {
+            this.YDates = new ObservableCollection<DateTime>();
+            int currDate = DateTime.Now.Year;
+            while (currDate >= TeamStart) {
+                this.YDates.Add(new DateTime(currDate, 9, 1));    
+                currDate--;
+            }
+        }
     }
 }
