@@ -117,6 +117,9 @@
     <Compile Include="Pages\SoonPage.xaml.cs">
       <DependentUpon>SoonPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserInputWindow.xaml.cs">
+      <DependentUpon>UserInputWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Pages\ManagerSubPages\Groups.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SoonPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

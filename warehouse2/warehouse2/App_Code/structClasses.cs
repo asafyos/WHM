@@ -19,9 +19,9 @@ namespace warehouse2 {
 
     public class LoanedTool : NotifObject {
         private string userName;
-        private string userID;
+        private int userID;
         private string toolName;
-        private string toolID;
+        private int toolID;
         private DateTime takeTime;
         private string groupName;
         private string storekeeper;
@@ -35,7 +35,7 @@ namespace warehouse2 {
                 OnPropertyChanged("UserName");
             }
         }
-        public string UserID {
+        public int UserID {
             get { return userID; }
             set {
                 userID = value;
@@ -49,7 +49,7 @@ namespace warehouse2 {
                 OnPropertyChanged("ToolName");
             }
         }
-        public string ToolID {
+        public int ToolID {
             get { return toolID; }
             set {
                 toolID = value;

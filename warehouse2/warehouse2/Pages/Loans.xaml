@@ -7,8 +7,10 @@
       mc:Ignorable="d"
       DataContext="{Binding RelativeSource={RelativeSource Self}}"
       Title="Loans" MinWidth="900" MinHeight="400" FlowDirection="RightToLeft" Grid.IsSharedSizeScope="True">
-
-    <Grid>
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="b2v" />
+    </Page.Resources>
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120" SharedSizeGroup="InputSize"/>
             <ColumnDefinition Width="247*"/>
@@ -87,7 +89,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <DataGrid x:Name="dataGridLoaned" ItemsSource="{Binding SharedDataIns.OutToolList}" Margin="1,0,1.2,0.8" Grid.Row="2" Grid.ColumnSpan="5" FontSize="15" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False">
+        <DataGrid x:Name="dataGridLoaned" ItemsSource="{Binding SharedDataIns.OutToolList}" Margin="1,0,1.2,0.8" Grid.Row="2" Grid.ColumnSpan="5" FontSize="15" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False" SelectionChanged="dataGridLoaned_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding UserName}" Header="שם" MinWidth="85"/>
                 <DataGridTextColumn Binding="{Binding UserID}" Header="UserID" Visibility="Collapsed"/>
@@ -99,7 +101,7 @@
                 <DataGridTemplateColumn Header="החזרה" MinWidth="85">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="החזר"/>
+                            <Button Content="החזר" Click="GridButton_Click" Tag="{Binding}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -123,5 +125,6 @@
                 </Style>
             </Button.Style>
         </Button>
+        <Button x:Name="ReturnButton" Visibility="{Binding Path=NeedReturn, Converter={StaticResource b2v}}" Content="החזר" Grid.Column="4" Margin="5" Grid.Row="1" FontSize="15" Click="ReturnButton_Click"/>
     </Grid>
 </Page>

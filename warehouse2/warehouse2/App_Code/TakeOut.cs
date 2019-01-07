@@ -33,9 +33,9 @@ namespace warehouse2 {
             foreach (DataRow row in ds.Tables[0].Rows) {
                 list.Add(new LoanedTool {
                     UserName = row["UserName"].ToString(),
-                    UserID = row["UserID"].ToString(),
+                    UserID = Convert.ToInt32(row["UserID"]),
                     ToolName = row["KindName"].ToString() + " " + row["ToolName"].ToString() + " " + row["Numberring"].ToString(),
-                    ToolID = row["ToolID"].ToString(),
+                    ToolID = Convert.ToInt32(row["ToolID"]),
                     TakeTime = Convert.ToDateTime(row["TakeDate"]),
                     GroupName = row["StatusName"].ToString(),
                     Storekeeper = row["Storekeeper"].ToString()
