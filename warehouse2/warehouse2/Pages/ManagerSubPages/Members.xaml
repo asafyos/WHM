@@ -31,17 +31,27 @@
         </Grid.RowDefinitions>
         <ComboBox x:Name="comboBoxMemberFilter" Margin="5,5,5,5.2" FontSize="15" Width="110" SelectedItem="{Binding SelectedFilter}" DisplayMemberPath="GroupName" ItemsSource="{Binding GroupsDDL}"/>
         <CheckBox x:Name="checkBoxMentorFilter" Visibility="{Binding Path=DispCheck, Converter={StaticResource b2v}}" IsChecked="{Binding ShowMentor}" Content="הצג בוגרים ומנטורים" Grid.Column="1" Margin="10,5,4.8,5.2" Grid.ColumnSpan="2" FontSize="15" VerticalContentAlignment="Center" Padding="5,-3,0,0"/>
-        <CheckBox x:Name="checkBoxCancelFilter" Content="הצג פורשים" IsThreeState="True" Grid.Column="3" Margin="10,5,4.8,5.2" Grid.ColumnSpan="2" FontSize="15" VerticalContentAlignment="Center" Padding="5,-3,0,0"/>
-        <DataGrid x:Name="dataGridMembers" Margin="5,4.8,4.8,5.2" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="5" ItemsSource="{Binding MembersList}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" Background="{x:Null}">
+        <CheckBox x:Name="checkBoxCancelFilter" Content="הצג פורשים" IsChecked="{Binding ShowQuit}" Grid.Column="3" Margin="10,5,4.8,5.2" Grid.ColumnSpan="2" FontSize="15" VerticalContentAlignment="Center" Padding="5,-3,0,0"/>
+        <DataGrid x:Name="dataGridMembers" Margin="5,4.8,4.8,5.2" Grid.Row="1" Grid.ColumnSpan="4" Grid.RowSpan="5" ItemsSource="{Binding MembersList}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" Background="{x:Null}" SelectionChanged="dataGridMembers_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding MemberName}" Header="שם חבר קבוצה" MinWidth="160"/>
                 <DataGridTextColumn Binding="{Binding GroupName}" Header="צוות" MinWidth="85"/>
                 <DataGridTextColumn Binding="{Binding JoinDate, StringFormat=yyyy}" Header="שנת י'" MinWidth="85"/>
                 <DataGridTextColumn Binding="{Binding MemberID, StringFormat='U{0:D10}'}" Header="מספר ברקוד" MinWidth="100"/>
             </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Enabled}" Value="False">
+                            <Setter Property="Background" Value="#FF9A9A9A" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
-        <Button x:Name="buttonQuit" Content="פרש" Grid.Column="4" Margin="5.2,4.6,4.8,4.6" Grid.Row="2" FontSize="15" Click="buttonQuit_Click"/>
-        <Button x:Name="buttonReturn" Content="חזר" Grid.Column="5" Margin="5.2,4.6,4.8,4.6" Grid.Row="2" FontSize="15" Visibility="Hidden" Click="buttonReturn_Click"/>
+        <Button x:Name="buttonQuit" Content="פרש" Visibility="{Binding Path=NeedQuit, Converter={StaticResource b2v}}" Grid.Column="4" Margin="5.2,4.6,4.8,4.6" Grid.Row="2" FontSize="15" Click="buttonQuit_Click"/>
+        <Button x:Name="buttonReturn" Content="חזר" Visibility="{Binding Path=NeedRest, Converter={StaticResource b2v}}" Grid.Column="5" Margin="5.2,4.6,4.8,4.6" Grid.Row="2" FontSize="15" Click="buttonReturn_Click"/>
         <Button x:Name="buttonChangeCrew" Content="שינוי צוות" Grid.Column="4" Margin="5.2,5.4,4.8,4.8" Grid.Row="3" FontSize="15" Click="buttonChangeCrew_Click"/>
         <ComboBox x:Name="comboBoxChangeCrew" Margin="5.2,5.4,4.8,4.8" FontSize="15" Grid.Row="3" Grid.Column="5" SelectedItem="{Binding SelectedChange}" DisplayMemberPath="GroupName" ItemsSource="{Binding GroupsDDL}"/>
         <Button x:Name="buttonPrintMemberBarcode" Content="הדפס ברקוד" Grid.Column="4" Margin="5.2,5.2,4.8,5" Grid.Row="4" FontSize="15" Grid.ColumnSpan="2" Click="buttonPrintMemberBarcode_Click"/>

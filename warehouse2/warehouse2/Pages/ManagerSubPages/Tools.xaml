@@ -121,5 +121,6 @@
             </TextBlock.Style>
         </TextBlock>
         <Button x:Name="buttonAddTool" Content="הוסף" Grid.Column="6" Margin="25,5,20,5" Grid.Row="4" FontSize="15" Grid.ColumnSpan="2" Click="buttonAddTool_Click"/>
+        <CheckBox x:Name="checkBox" IsChecked="{Binding ShowBroke}" Content="הצג מבוטלים" Grid.Column="2" HorizontalAlignment="Right" Margin="0,5,5,5" Grid.ColumnSpan="2" FontSize="15"/>
     </Grid>
 </Page>

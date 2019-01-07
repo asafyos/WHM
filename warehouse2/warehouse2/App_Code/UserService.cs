@@ -56,7 +56,7 @@ namespace warehouse2 {
                     MemberName = row["UserName"].ToString(),
                     GroupID = Convert.ToInt32(row["StatusID"]),
                     GroupName = row["StatusName"].ToString(),
-                    Enabled = true,
+                    Enabled = Convert.ToBoolean(row["Enabled"]),
                     JoinDate = Convert.ToDateTime(row["AddingDate"])
                 });
             }

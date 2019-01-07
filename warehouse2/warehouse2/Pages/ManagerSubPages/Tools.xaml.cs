@@ -33,6 +33,7 @@ namespace warehouse2 {
         KindDets selectedChanging;
         string toolName;
         string numberring;
+        bool showBroke;
         public SharedData SharedDataIns {
             get { return sharedDataIns; }
             set {
@@ -43,11 +44,7 @@ namespace warehouse2 {
         public ObservableCollection<ToolDets> ToolsList {
             get {
                 ObservableCollection<ToolDets> list;
-                if (SelectedFilter.KindID == -1) {
-                    list = new ObservableCollection<ToolDets>(SharedData.GetInstans().ToolsList);
-                } else {
-                    list = new ObservableCollection<ToolDets>(SharedData.GetInstans().ToolsList.Where((e) => e.KindID == SelectedFilter.KindID));
-                }
+                list = new ObservableCollection<ToolDets>(SharedData.GetInstans().ToolsList.Where((e) => (SelectedFilter.KindID == -1 ? true : e.KindID == SelectedFilter.KindID) && (ShowBroke ? true : e.Enabled)));
                 return list;
             }
         }
@@ -94,7 +91,14 @@ namespace warehouse2 {
                 OnPropertyChanged("Numberring");
             }
         }
-
+        public bool ShowBroke {
+            get { return this.showBroke; }
+            set {
+                this.showBroke = value;
+                OnPropertyChanged("ShowBroke");
+                OnPropertyChanged("ToolsList");
+            }
+        }
 
 
         public bool NeedLost {
@@ -116,6 +120,7 @@ namespace warehouse2 {
                 ToolService.CancleTool(tool.ToolID);
             }
             SharedDataIns.refreshData(TYPE.TOOL);
+            OnPropertyChanged("ToolsList");
         }
 
         private void buttonfound_Click(object sender, RoutedEventArgs e) {
@@ -123,6 +128,7 @@ namespace warehouse2 {
                 ToolService.RestoreTool(tool.ToolID);
             }
             SharedDataIns.refreshData(TYPE.TOOL);
+            OnPropertyChanged("ToolsList");
         }
 
         private void dataGridTools_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -146,6 +152,7 @@ namespace warehouse2 {
                 Numberring = null;
                 this.comboBoxAddToolKind.SelectedIndex = 0;
                 sharedDataIns.refreshData(TYPE.TOOL);
+                OnPropertyChanged("ToolsList");
             }
         }
     }

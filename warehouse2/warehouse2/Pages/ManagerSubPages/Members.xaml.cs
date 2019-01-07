@@ -42,8 +42,9 @@ namespace warehouse2 {
         private DateTime selectedYear;
         private string memberName;
         private bool showMentor;
+        private bool showQuit;
         public ObservableCollection<MemberDets> MembersList {
-            get { return new ObservableCollection<MemberDets>(SharedData.GetInstans().MembersList.Where((e) => (SelectedFilter.GroupID != -1 ? e.GroupID == SelectedFilter.GroupID : (ShowMentor ? true : e.GroupID != 1)))); }
+            get { return new ObservableCollection<MemberDets>(SharedData.GetInstans().MembersList.Where((e) => (SelectedFilter.GroupID != -1 ? e.GroupID == SelectedFilter.GroupID : (ShowMentor ? true : e.GroupID != 1)) && (ShowQuit ? true : e.Enabled))); }
         }
         public ObservableCollection<GroupDets> GroupsDDL {
             get {
@@ -100,18 +101,42 @@ namespace warehouse2 {
         public bool DispCheck {
             get { return this.SelectedFilter.GroupID == -1; }
         }
+        public bool ShowQuit {
+            get { return this.showQuit; }
+            set {
+                this.showQuit = value;
+                OnPropertyChanged("ShowQuit");
+                OnPropertyChanged("MembersList");
+            }
+        }
+
+        public bool NeedQuit {
+            get { return this.dataGridMembers.SelectedItems.Cast<MemberDets>().Where((e) => e.Enabled == true).ToList().Count > 0; }
+        }
+        public bool NeedRest {
+            get { return this.dataGridMembers.SelectedItems.Cast<MemberDets>().Where((e) => e.Enabled == false).ToList().Count > 0; }
+        }
 
         public Members() {
             InitializeComponent();
             this.SharedDataIns = SharedData.GetInstans();
+            ShowQuit = false;
         }
 
         private void buttonQuit_Click(object sender, RoutedEventArgs e) {
-            
+            foreach (MemberDets member in this.dataGridMembers.SelectedItems.Cast<MemberDets>().Where((t) => t.Enabled == true)) {
+                UserService.CancleUser(member.MemberID);
+            }
+            SharedDataIns.refreshData(TYPE.MMBR);
+            OnPropertyChanged("MembersList");
         }
 
         private void buttonReturn_Click(object sender, RoutedEventArgs e) {
-
+            foreach (MemberDets member in this.dataGridMembers.SelectedItems.Cast<MemberDets>().Where((t) => t.Enabled == false)) {
+                UserService.RestoreUser(member.MemberID);
+            }
+            SharedDataIns.refreshData(TYPE.MMBR);
+            OnPropertyChanged("MembersList");
         }
 
         private void buttonChangeCrew_Click(object sender, RoutedEventArgs e) {
@@ -131,7 +156,13 @@ namespace warehouse2 {
                 this.comboBoxAddMemberCrew.SelectedIndex = 0;
                 SelectedYear = new DateTime(1, 1, 1);
                 this.comboBoxAddMemberYear.SelectedIndex = 0;
+                OnPropertyChanged("MembersList");
             }
+        }
+
+        private void dataGridMembers_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            OnPropertyChanged("NeedQuit");
+            OnPropertyChanged("NeedRest");
         }
     }
 }
