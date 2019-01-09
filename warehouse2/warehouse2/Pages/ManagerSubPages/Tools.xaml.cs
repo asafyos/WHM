@@ -143,7 +143,18 @@ namespace warehouse2 {
         }
 
         private void buttonChangeKind_Click(object sender, RoutedEventArgs e) {
-
+            if (SelectedChanging.KindID != -1 && this.dataGridTools.SelectedItems.Count > 0) {
+                int[] ids = new int[this.dataGridTools.SelectedItems.Count];
+                int i = 0;
+                foreach (ToolDets tool in this.dataGridTools.SelectedItems) {
+                    ids[i] = tool.ToolID;
+                    i++;
+                }
+                ToolService.changeKind(ids, SelectedChanging.KindID);
+                SharedDataIns.refreshData(TYPE.TOOL);
+                OnPropertyChanged("ToolsList");
+                this.comboBoxChangeKind.SelectedIndex = 0;
+            }
         }
 
         private void buttonAddTool_Click(object sender, RoutedEventArgs e) {

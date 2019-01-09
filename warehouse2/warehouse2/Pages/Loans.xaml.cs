@@ -33,6 +33,9 @@ namespace warehouse2 {
         string searchBarcode;
         SharedData sharedDataIns;
         ObservableCollection<ToolDets> requsetTools;
+        int tool;
+        int member;
+        string search;
 
         public string LoanBarcode {
             get { return (this.loanBarcode == null ? "" : this.loanBarcode); }
@@ -52,6 +55,17 @@ namespace warehouse2 {
             get { return (this.searchBarcode == null ? "" : this.searchBarcode); }
             set {
                 this.searchBarcode = value;
+                tool = member = -1;
+                search = "";
+                if (this.searchBarcode != null && this.searchBarcode.Length > 0) {
+                    if (this.searchBarcode[0] == 'T') {
+                        tool = int.Parse(this.searchBarcode.Remove(0, 1));
+                    } else if (this.searchBarcode[0] == 'U') {
+                        member = int.Parse(this.searchBarcode.Remove(0, 1));
+                    } else {
+                        search = this.searchBarcode;
+                    }
+                }
                 OnPropertyChanged("SearchBarcode");
             }
         }
@@ -66,7 +80,16 @@ namespace warehouse2 {
             get { return this.dataGridLoaned.SelectedItems.Count > 0; }
         }
         public ObservableCollection<LoanedTool> OutToolList {
-            get { return SharedData.GetInstans().OutToolList; }
+            get {
+                return new ObservableCollection<LoanedTool>(SharedData.GetInstans().OutToolList.Where((e) =>
+              (tool == -1 ? true : e.ToolID == tool) &&
+              (member == -1 ? true : e.UserID == member) &&
+              (search == "" ? true : (e.UserName.Contains(search) ||
+                                      e.ToolName.Contains(search) || 
+                                      e.GroupName.Contains(search)
+               ))
+          ).ToList());
+            }
         }
         public ObservableCollection<ToolDets> RequsetTools {
             get { return this.requsetTools; }
@@ -105,7 +128,7 @@ namespace warehouse2 {
                         }
                     } else {
                         // As 'T', but free text
-                        RequsetTools.Add(new ToolDets { ToolName = LoanBarcode, ToolID = -1});
+                        RequsetTools.Add(new ToolDets { ToolName = LoanBarcode, ToolID = -1 });
                         OnPropertyChanged("RequsetTools");
                     }
                 }

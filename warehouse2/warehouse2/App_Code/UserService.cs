@@ -148,9 +148,9 @@ namespace warehouse2 {
         /// </summary>
         /// <param name="now">this year. change to Elder whoever this year is 20/6/201X, when X is the number of register year + 3</param>
         public static void checkIsElder() {
-            changeToElder(getToElderID());
+            UpdateUser(getToElderID(), 1);
         }
-        private static object[] getToElderID() {//GetUserIDNDate
+        private static int[] getToElderID() {//GetUserIDNDate
             DataSet ds = new DataSet();
             try {
                 OleDbCommand cmd = new OleDbCommand("GetUserIDNDate", myConn);
@@ -160,7 +160,7 @@ namespace warehouse2 {
                 adapter.Fill(ds, "UsersTbl");
                 ds.Tables["UsersTbl"].PrimaryKey = new DataColumn[] { ds.Tables["UsersTbl"].Columns["UserID"] };
             } catch (Exception ex) { throw ex; }
-            System.Collections.ArrayList ids = new System.Collections.ArrayList();
+            List<int> ids = new List<int>();
             foreach (DataRow dr in ds.Tables[0].Rows) {
                 DateTime date = (DateTime)dr["AddingDate"];
                 date = date.AddYears(3);
@@ -168,24 +168,6 @@ namespace warehouse2 {
                     ids.Add((int)dr["UserID"]);
             }
             return ids.ToArray();
-        }
-        private static void changeToElder(object[] ids) {
-            foreach (object user in ids) {
-                int userID;
-                if (user is int) {
-                    userID = Convert.ToInt32(user);
-                    try {
-                        myConn.Open();
-                        OleDbCommand myComm = new OleDbCommand("MakeUserElder", myConn);
-                        myComm.CommandType = CommandType.StoredProcedure;
-                        OleDbParameter param;
-                        param = myComm.Parameters.Add("UserID", OleDbType.Integer);
-                        param.Direction = ParameterDirection.Input;
-                        param.Value = user;
-                        myComm.ExecuteNonQuery();
-                    } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
-                }
-            }
         }
 
         //
@@ -396,19 +378,21 @@ namespace warehouse2 {
             return list;
         }
 
-        public static void UpdateUser(int userID, int StatusID) {
+        public static void UpdateUser(int[] userIDs, int StatusID) {
+            myConn.Open();
             try {
-                OleDbCommand cmd = new OleDbCommand("UpdateCrew", myConn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                OleDbParameter param;
-                param = cmd.Parameters.Add("@StatusID", OleDbType.BSTR);
-                param.Direction = ParameterDirection.Input;
-                param.Value = StatusID;
-                param = cmd.Parameters.Add("@UserID", OleDbType.BSTR);
-                param.Direction = ParameterDirection.Input;
-                param.Value = userID;
-                myConn.Open();
-                cmd.ExecuteNonQuery();
+                for (int i = 0; i < userIDs.Length; i++) {
+                    OleDbCommand cmd = new OleDbCommand("UpdateCrew", myConn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    OleDbParameter param;
+                    param = cmd.Parameters.Add("@StatusID", OleDbType.BSTR);
+                    param.Direction = ParameterDirection.Input;
+                    param.Value = StatusID;
+                    param = cmd.Parameters.Add("@UserID", OleDbType.BSTR);
+                    param.Direction = ParameterDirection.Input;
+                    param.Value = userIDs[i];
+                    cmd.ExecuteNonQuery();
+                }
             } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
         }
     }

@@ -296,5 +296,27 @@ namespace warehouse2 {
             }
             return list;
         }
+
+        public static void changeKind(int[] toolIds, int kindID) {
+            myConn.Open();
+            try {
+                for (int i = 0; i < toolIds.Length; i++) {
+                    OleDbCommand cmd = new OleDbCommand("UpdateToolKind", myConn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    OleDbParameter param;
+                    param = cmd.Parameters.Add("@KindID", OleDbType.BSTR);
+                    param.Direction = ParameterDirection.Input;
+                    param.Value = kindID;
+                    param = cmd.Parameters.Add("@ToolID", OleDbType.BSTR);
+                    param.Direction = ParameterDirection.Input;
+                    param.Value = toolIds[i];
+                    cmd.ExecuteNonQuery();
+                }
+            } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
+        }
+
+        public static bool isToolIn(int toolID) {
+            return false;
+        }
     }
 }

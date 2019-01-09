@@ -141,7 +141,18 @@ namespace warehouse2 {
         }
 
         private void buttonChangeCrew_Click(object sender, RoutedEventArgs e) {
-
+            if (SelectedChange.GroupID != -1 && this.dataGridMembers.SelectedItems.Count > 0) {
+                int[] ids = new int[this.dataGridMembers.SelectedItems.Count];
+                int i = 0;
+                foreach (MemberDets member in this.dataGridMembers.SelectedItems) {
+                    ids[i] = member.MemberID;
+                    i++;
+                }
+                UserService.UpdateUser(ids, SelectedChange.GroupID);
+                sharedDataIns.refreshData(TYPE.MMBR);
+                OnPropertyChanged("MembersList");
+                this.comboBoxChangeCrew.SelectedIndex = 0;
+            }
         }
 
         private void buttonPrintMemberBarcode_Click(object sender, RoutedEventArgs e) {
