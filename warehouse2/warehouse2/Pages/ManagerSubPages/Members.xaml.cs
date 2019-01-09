@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -144,7 +145,14 @@ namespace warehouse2 {
         }
 
         private void buttonPrintMemberBarcode_Click(object sender, RoutedEventArgs e) {
-
+            openBarcode();
+        }
+        private void openBarcode() {
+            List<string> list = new List<string>();
+            foreach (MemberDets member in this.dataGridMembers.SelectedItems) {
+                list.Add("U" + member.MemberID.ToString("D10"));
+            };
+            BarcodeService.SaveBarcodesInFile(list.ToArray());
         }
 
         private void buttonAddMember_Click(object sender, RoutedEventArgs e) {

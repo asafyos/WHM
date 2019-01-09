@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,35 +16,10 @@ namespace warehouse2 {
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class ManagerWindow : Window, INotifyPropertyChanged {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string property) {
-            if (PropertyChanged != null) {
-                PropertyChanged(this, new PropertyChangedEventArgs(property));
-            }
-        }
-
-        SharedData shareDataIns;
-        public SharedData ShareDataIns {
-            get { return this.shareDataIns; }
-            set {
-                this.shareDataIns = value;
-                OnPropertyChanged("ShareDataIns");
-            }
-        }
-        public ObservableCollection<MemberDets> StorekeepersList {
-            get {
-                ObservableCollection<MemberDets> list = new ObservableCollection<MemberDets>(SharedData.GetInstans().StorekeepersList);
-                list.Insert(0, new MemberDets { MemberName = "בחר מחסנאי", MemberID = -1, });
-                return list;
-            }
-        }
-
+    public partial class ManagerWindow : Window {
         public ManagerWindow() {
             InitializeComponent();
             this._UserName.Focus();
-            ShareDataIns = SharedData.GetInstans();
         }
 
         private void button_Click(object sender, RoutedEventArgs e) {
@@ -65,7 +38,7 @@ namespace warehouse2 {
         }
 
         private void _Password_KeyUp(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Enter) {
+          if (e.Key == Key.Enter) {
                 if (this.tryLogin()) {
                     MainWindow.mainWin.ManagerIn = true;
                     SharedData.GetInstans().CurrentManager = new ManagerDets { UserName = this._UserName.Text, Password = this._Password.Password };

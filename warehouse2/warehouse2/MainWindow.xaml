@@ -9,6 +9,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="b2v" />
         <local:BoolToOppositeBoolConverter x:Key="boolInverter" />
+        <local:TitleConverter x:Key="titleConvert" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,7 +18,7 @@
         </Grid.RowDefinitions>
         <Menu x:Name="menu" Margin="0">
             <MenuItem Header="מחסנאי">
-                <ComboBox ItemsSource="{Binding StorekeepersList}" DisplayMemberPath="MemberName" SelectedItem="{Binding SharedDataIns.currentStorekeeper}"/>
+                <ComboBox ItemsSource="{Binding SharedDataIns.StorekeepersList}" DisplayMemberPath="MemberName" SelectionChanged="ComboBox_SelectionChanged" SelectedItem="{Binding SharedDataIns.CurrentStorekeeper}"/>
             </MenuItem>
             <MenuItem Header="מנהל">
                 <MenuItem Header="היכנס" Click="MenuItem_LogIn_Click" IsEnabled="{Binding ManagerIn, Converter={StaticResource boolInverter}}"/>

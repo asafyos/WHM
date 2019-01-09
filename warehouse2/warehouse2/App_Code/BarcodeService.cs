@@ -6,17 +6,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Office.Interop.Word;
+using word = Microsoft.Office.Interop.Word;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 
 namespace warehouse2 {
     class BarcodeService {
 
-
-
-
-        public void SaveBarcodesInFile(string[] list) {
+        public static void SaveBarcodesInFile(string[] list) {
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Word Document|*.docx";
             MSWordService service = new MSWordService();
@@ -24,7 +22,10 @@ namespace warehouse2 {
                 if (saveDialog.FileName.IndexOf(".docx") == -1)
                     saveDialog.FileName += ".docx";
                 service.SetOutputPath(saveDialog.FileName);
-                service.GenerateBarcodesToOutput(list);
+            service.ValueList = list;
+            Thread thread = new Thread(service.GenerateBarcodesToOutput);
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
             }
         }
 
@@ -34,51 +35,70 @@ namespace warehouse2 {
         private object fileInputPath;
         private object fileOutputPath;
         private string FILE_OUTPUT;
-        private Application MSWord;
+        private word.Application MSWord;
 
         public MSWordService() {
-            MSWord = new Application();
+            MSWord = new word.Application();
             MSWord.Visible = false;
-
             SetInputPath(AppDomain.CurrentDomain.BaseDirectory + "\\tamplate.docx");
         }
+        public string[] ValueList {
+            get; set;
+        }
 
-        public void GenerateBarcodesToOutput(string[] valueList) {
-            var wordDocument = GetDocument();
-            var bookmarks = wordDocument.Bookmarks;
-
+        public void GenerateBarcodesToOutput() {
+            const float c_pictureWidth = 170;
+            string c_picFile = AppDomain.CurrentDomain.BaseDirectory + "\\pic.jpg";
+            System.Drawing.Image[] barcodes = new System.Drawing.Image[ValueList.Length];
             Barcode barcode = GetNewBarcode();
+            for (int b = 0; b < ValueList.Length; b++) {
+                barcode.Value = ValueList[b];
+                barcodes[b] = barcode.GetImage();
+            }
 
-            int i = 0;
-            int j = 1;
-            do {
-                wordDocument = GetDocument();
-                bookmarks = wordDocument.Bookmarks;
-                foreach (Bookmark mark in bookmarks) {
-                    if (i >= valueList.Length) {
-                        break;
+            word.Application msWord = null;
+            word.Document doc = null;
+            object oMissing = System.Reflection.Missing.Value;
+            object oEndOfDoc = "\\endofdoc";
+            try {
+                msWord = new word.Application();
+                doc = msWord.Documents.Add(ref oMissing, ref oMissing, ref oMissing, ref oMissing);
+            } catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+            if (msWord != null && doc != null) {
+                //doc.Range().PageSetup.Orientation = word.WdOrientation.wdOrientLandscape;
+                word.Table newTable;
+                word.Range wrdRange = doc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+                newTable = doc.Tables.Add(wrdRange, 1, 2, ref oMissing, oMissing);
+                newTable.Borders.InsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+                newTable.Borders.OutsideLineStyle = Microsoft.Office.Interop.Word.WdLineStyle.wdLineStyleSingle;
+                newTable.AllowAutoFit = true;
+                
+                for (int i = 0; i < barcodes.Length; i += 2) {
+                    //System.Windows.Clipboard.SetDataObject(barcodes[i]);
+                    //newTable.Cell(newTable.Rows.Count, 1).Range.Paste();
+                    barcodes[i].Save(c_picFile);
+                    var picture = newTable.Cell(newTable.Rows.Count, 1).Range.InlineShapes.AddPicture(c_picFile);
+                    picture.Width = c_pictureWidth;
+                    if (i < barcodes.Length - 1) {
+                        //System.Windows.Clipboard.SetDataObject(barcodes[i + 1]);
+                        //newTable.Cell(newTable.Rows.Count, 2).Range.Paste();
+                        barcodes[i + 1].Save(c_picFile);
+                        picture = newTable.Cell(newTable.Rows.Count, 2).Range.InlineShapes.AddPicture(c_picFile);
+                        picture.Width = c_pictureWidth;
                     }
-                    barcode.Value = valueList[i];
-                    var bookmarkRange = GetBookmarkLocation(mark.Name, wordDocument);
-                    var barcodeImage = barcode.GetImage();
-
-                    System.Windows.Clipboard.SetDataObject(barcodeImage);
-                    bookmarkRange.Paste();
-                    i++;
+                    if (i < barcodes.Length - 2) {
+                        newTable.Rows.Add();
+                    }
                 }
-                wordDocument.SaveAs(ref fileOutputPath);
-                wordDocument.Close();
-                string[] headers = FILE_OUTPUT.ToString().Split('.');
-                headers[headers.Length - 2] += "_00" + j.ToString();
-                string temp = "";
-                for (int s = 0; s < headers.Length; s++) {
-                    temp += headers[s] + (s == headers.Length - 1 ? "" : ".");
-                }
-                fileOutputPath = temp;
-                j++;
-            } while (i < valueList.Length);
 
-            QuitWord(MSWord);
+                File.Delete(c_picFile);
+                if (fileOutputPath != null)
+                    doc.SaveAs(ref fileOutputPath);
+                msWord.Visible = true;
+                //doc.Close();
+            }
         }
 
         private void SetInputPath(string path) {
@@ -88,28 +108,11 @@ namespace warehouse2 {
             fileOutputPath = path;
             FILE_OUTPUT = path;
         }
-        public Document GetDocument() {
-            object readOnly = true;
-            object convert = false;
-            Document docWord = MSWord.Documents.Open(ref fileInputPath, ref convert, ref readOnly);
-            return docWord;
-        }
-        private Range GetBookmarkLocation(object bookmarkName, Document document) {
-            Range bookmarkLocations = document.Bookmarks.get_Item(ref bookmarkName).Range;
-            return bookmarkLocations;
-        }
-
         private Barcode GetNewBarcode() {
             Barcode barcode = new Barcode();
             //barcode.Value = value;
             barcode.Symbology = SymbologyType.Code128;
             return barcode;
-        }
-
-        private void QuitWord(Application app) {
-            object saveChanges = false;
-            app.Quit(ref saveChanges);
-            System.Runtime.InteropServices.Marshal.ReleaseComObject(app);
         }
     }
 

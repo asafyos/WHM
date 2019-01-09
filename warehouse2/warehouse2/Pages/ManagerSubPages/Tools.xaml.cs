@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -154,6 +155,18 @@ namespace warehouse2 {
                 sharedDataIns.refreshData(TYPE.TOOL);
                 OnPropertyChanged("ToolsList");
             }
+        }
+
+        private void buttonPrintToolBarcode_Click(object sender, RoutedEventArgs e) {
+            openBarcode();
+        }
+
+        private void openBarcode() {
+            List<string> list = new List<string>();
+            foreach (ToolDets tool in this.dataGridTools.SelectedItems) {
+                list.Add("T" + tool.ToolID.ToString("D10"));
+            };
+            BarcodeService.SaveBarcodesInFile(list.ToArray());
         }
     }
 }

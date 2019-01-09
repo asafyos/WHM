@@ -108,10 +108,12 @@ namespace warehouse2 {
             }
         }
         public ObservableCollection<ManagerDets> ManagersList {
-            get { return new ObservableCollection<ManagerDets>(managersList.Where((e) => e.UserName != "admin" && 
-                                                                                         e.Password != "nimda" && 
-                                                                                         e.UserName != CurrentManager.UserName && 
-                                                                                         e.Password != CurrentManager.Password)); }
+            get {
+                return new ObservableCollection<ManagerDets>(managersList.Where((e) => e.UserName != "admin" &&
+                                                                                       e.Password != "nimda" &&
+                                                                                       e.UserName != CurrentManager.UserName &&
+                                                                                       e.Password != CurrentManager.Password));
+            }
             set {
                 this.managersList = value;
                 OnPropertyChanged("ManagersList");
@@ -134,7 +136,7 @@ namespace warehouse2 {
             }
         }
         public MemberDets CurrentStorekeeper {
-            get { return this.currentStorekeeper; }
+            get { return (this.currentStorekeeper == null ? new MemberDets { MemberName = "בחר מחסנאי" } : this.currentStorekeeper); }
             set {
                 this.currentStorekeeper = value;
                 OnPropertyChanged("CurrentStorekeeper");
@@ -197,7 +199,7 @@ namespace warehouse2 {
             this.YDates = new ObservableCollection<DateTime>();
             int currDate = DateTime.Now.Year;
             while (currDate >= TeamStart) {
-                this.YDates.Add(new DateTime(currDate, 9, 1));    
+                this.YDates.Add(new DateTime(currDate, 9, 1));
                 currDate--;
             }
         }

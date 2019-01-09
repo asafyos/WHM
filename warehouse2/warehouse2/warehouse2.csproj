@@ -117,6 +117,7 @@
     <Compile Include="Pages\SoonPage.xaml.cs">
       <DependentUpon>SoonPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TitleConverter.cs" />
     <Compile Include="UserInputWindow.xaml.cs">
       <DependentUpon>UserInputWindow.xaml</DependentUpon>
     </Compile>
@@ -216,7 +217,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="tamplate.docx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

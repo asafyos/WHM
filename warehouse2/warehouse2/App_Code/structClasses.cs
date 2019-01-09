@@ -236,6 +236,7 @@ namespace warehouse2 {
             set {
                 toolName = value;
                 OnPropertyChanged("ToolName");
+                OnPropertyChanged("FullName");
             }
         }
         public int KindID {
@@ -250,6 +251,7 @@ namespace warehouse2 {
             set {
                 kindName = value;
                 OnPropertyChanged("KindName");
+                OnPropertyChanged("FullName");
             }
         }
         public string Number {
@@ -257,6 +259,7 @@ namespace warehouse2 {
             set {
                 number = value;
                 OnPropertyChanged("Number");
+                OnPropertyChanged("FullName");
             }
         }
         public bool Enabled {
@@ -279,6 +282,9 @@ namespace warehouse2 {
                 place = value;
                 OnPropertyChanged("Place");
             }
+        }
+        public string FullName {
+            get { return KindName + " " + ToolName + " " + Number; }
         }
     }
     public class ManagerDets : NotifObject {

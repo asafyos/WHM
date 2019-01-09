@@ -87,3 +87,5 @@ C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\ob
 C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\obj\Release\warehouse2.g.resources
 C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\obj\Release\warehouse2.Properties.Resources.resources
 C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\obj\Release\warehouse2.csproj.GenerateResource.Cache
+C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\obj\Release\UserInputWindow.g.cs
+C:\Users\USER\Documents\Visual Studio 2015\Projects\WHM\warehouse2\warehouse2\obj\Release\UserInputWindow.baml

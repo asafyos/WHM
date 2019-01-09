@@ -62,7 +62,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <ListBox x:Name="listBoxWantedTools" Grid.Column="1" Margin="4.6,5,0,5" Grid.RowSpan="2" MinWidth="300" HorizontalAlignment="Left" FontSize="15">
+        <ListBox x:Name="listBoxWantedTools" SelectionMode="Multiple" ItemsSource="{Binding RequsetTools}" DisplayMemberPath="FullName" Grid.Column="1" Margin="4.6,5,0,5" Grid.RowSpan="2" MinWidth="300" HorizontalAlignment="Left" FontSize="15">
             <ListBox.Style>
                 <Style TargetType="{x:Type ListBox}">
                     <Setter Property="Visibility" Value="Visible"/>
@@ -74,7 +74,7 @@
                 </Style>
             </ListBox.Style>
         </ListBox>
-        <Button Content="מחק" Margin="4.8,5,5.8,5" Grid.Column="2">
+        <Button Content="מחק" Margin="4.8,5,5.8,5" Grid.Column="2" Click="CancelRequestButton_Click">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Setter Property="Visibility" Value="Visible"/>
@@ -89,7 +89,7 @@
                 </Style>
             </Button.Style>
         </Button>
-        <DataGrid x:Name="dataGridLoaned" ItemsSource="{Binding SharedDataIns.OutToolList}" Margin="1,0,1.2,0.8" Grid.Row="2" Grid.ColumnSpan="5" FontSize="15" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False" SelectionChanged="dataGridLoaned_SelectionChanged">
+        <DataGrid x:Name="dataGridLoaned" ItemsSource="{Binding OutToolList}" Margin="1,0,1.2,0.8" Grid.Row="2" Grid.ColumnSpan="5" FontSize="15" AutoGenerateColumns="False" Background="{x:Null}" HorizontalGridLinesBrush="#FF828282" VerticalGridLinesBrush="#FF828282" CanUserAddRows="False" SelectionChanged="dataGridLoaned_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding UserName}" Header="שם" MinWidth="85"/>
                 <DataGridTextColumn Binding="{Binding UserID}" Header="UserID" Visibility="Collapsed"/>

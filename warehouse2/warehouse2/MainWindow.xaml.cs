@@ -35,6 +35,9 @@ namespace warehouse2 {
         private DispatcherTimer checkReturnTimerComp;
         private bool managerIn;
         SharedData sharedDataIns;
+        MemberDets CurrentStorekeeper {
+            get { return SharedData.GetInstans().CurrentStorekeeper; }
+        }
 
         public bool ManagerIn {
             get { return this.managerIn; }
@@ -112,6 +115,10 @@ namespace warehouse2 {
 
         private void MenuItem_Refresh_Click(object sender, RoutedEventArgs e) {
             SharedDataIns.refreshData(TYPE.ALL);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            OnPropertyChanged("CurrentStorekeeper");
         }
     }
 }

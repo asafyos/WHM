@@ -32,6 +32,7 @@ namespace warehouse2 {
         string returnBarcode;
         string searchBarcode;
         SharedData sharedDataIns;
+        ObservableCollection<ToolDets> requsetTools;
 
         public string LoanBarcode {
             get { return (this.loanBarcode == null ? "" : this.loanBarcode); }
@@ -64,11 +65,24 @@ namespace warehouse2 {
         public bool NeedReturn {
             get { return this.dataGridLoaned.SelectedItems.Count > 0; }
         }
-
+        public ObservableCollection<LoanedTool> OutToolList {
+            get { return SharedData.GetInstans().OutToolList; }
+        }
+        public ObservableCollection<ToolDets> RequsetTools {
+            get { return this.requsetTools; }
+            set {
+                if (value == null)
+                    this.requsetTools = new ObservableCollection<ToolDets>();
+                else
+                    this.requsetTools = value;
+                OnPropertyChanged("RequsetTools");
+            }
+        }
 
         public Loans() {
             InitializeComponent();
             this.SharedDataIns = SharedData.GetInstans();
+            RequsetTools = new ObservableCollection<ToolDets>();
         }
 
 
@@ -76,13 +90,26 @@ namespace warehouse2 {
             if (e.Key == Key.Enter) {
                 if (LoanBarcode != null && LoanBarcode != "") {
                     if (LoanBarcode[0] == 'T') {
-
+                        LoanBarcode = LoanBarcode.Remove(0, 1);
+                        RequsetTools.Add(this.SharedDataIns.ToolsList.Where((t) => t.ToolID == Convert.ToInt32(LoanBarcode)).ToList()[0]);
+                        OnPropertyChanged("RequsetTools");
                     } else if (LoanBarcode[0] == 'U') {
-
+                        if (this.SharedDataIns.CurrentStorekeeper == null) {
+                            MessageBox.Show("לא נבחר מחסנאי");
+                        } else {
+                            LoanBarcode = LoanBarcode.Remove(0, 1);
+                            TakeOut.TakeOutTool(Convert.ToInt32(LoanBarcode), RequsetTools.ToList());
+                            this.SharedDataIns.refreshData(TYPE.LOAN);
+                            RequsetTools = null;
+                            OnPropertyChanged("OutToolList");
+                        }
                     } else {
-
+                        // As 'T', but free text
+                        RequsetTools.Add(new ToolDets { ToolName = LoanBarcode, ToolID = -1});
+                        OnPropertyChanged("RequsetTools");
                     }
                 }
+                LoanBarcode = null;
             }
         }
 
@@ -144,7 +171,9 @@ namespace warehouse2 {
         }
 
         private void textBoxSearch_KeyUp(object sender, KeyEventArgs e) {
-            MainWindow.mainWin.ManagerIn = !MainWindow.mainWin.ManagerIn;
+            //MainWindow.mainWin.ManagerIn = !MainWindow.mainWin.ManagerIn;
+
+            OnPropertyChanged("OutToolList");
         }
 
         private void GridButton_Click(object sender, RoutedEventArgs e) {
@@ -169,6 +198,17 @@ namespace warehouse2 {
 
         private void dataGridLoaned_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             OnPropertyChanged("NeedReturn");
+        }
+
+        private void CancelRequestButton_Click(object sender, RoutedEventArgs e) {
+            List<ToolDets> list = new List<ToolDets>();
+            foreach (ToolDets tool in this.listBoxWantedTools.SelectedItems) {
+                list.Add(tool);
+            }
+            foreach (ToolDets tool in list) {
+                RequsetTools.Remove(tool);
+            }
+            OnPropertyChanged("RequsetTools");
         }
     }
 }
