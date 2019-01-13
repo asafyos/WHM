@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.Collections;
 using System.Data;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace warehouse2 {
     /// <summary>
@@ -30,7 +31,7 @@ namespace warehouse2 {
                 PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
         }
-
+        private Thread teamThread;
         private DispatcherTimer checkReturnTimer;
         private DispatcherTimer checkReturnTimerComp;
         private bool managerIn;
@@ -78,7 +79,7 @@ namespace warehouse2 {
 #if COMP
             this.CompFrame.Content = new SoonPage();
 #endif
-
+                teamThread = new Thread(TeamService.updateDB);
             } catch (Exception ex) {
                 MessageBox.Show("2. " + ex.Message);
             }
@@ -119,6 +120,24 @@ namespace warehouse2 {
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             OnPropertyChanged("CurrentStorekeeper");
+        }
+
+        private void MenuItem_Teams_Click(object sender, RoutedEventArgs e) {
+            if (teamThread.IsAlive) {
+                message("הורדת נתונים בתהליך");
+            } else if (teamThread == Thread.CurrentThread) {
+                teamThread = new Thread(TeamService.updateDB);
+                TeamService.MainThread = Thread.CurrentThread;
+                teamThread.Start();
+                message("הורדת נתונים החלה");
+            } else {
+                TeamService.MainThread = Thread.CurrentThread;
+                teamThread.Start();
+                message("הורדת נתונים החלה");
+            }
+        }
+        public void message(string message) {
+            MessageBox.Show(message);
         }
     }
 }

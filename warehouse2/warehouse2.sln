@@ -5,16 +5,68 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "warehouse2", "warehouse2\warehouse2.csproj", "{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}"
 EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "warehouse_setup", "warehouse_setup\warehouse_setup.isproj", "{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "WebService", "WebService\", "{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_16907"
+		Debug.AspNetCompiler.PhysicalPath = "WebService\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_16907\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_16907"
+		Release.AspNetCompiler.PhysicalPath = "WebService\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_16907\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "16907"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{6889DEC3-CDBC-4ABB-A133-7C98EBEF965F}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.Debug|Any CPU.ActiveCfg = DVD-5
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.Debug|Any CPU.Build.0 = DVD-5
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.DVD-5|Any CPU.Build.0 = DVD-5
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.Release|Any CPU.ActiveCfg = SingleImage
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.Release|Any CPU.Build.0 = SingleImage
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{C294DC23-AF6A-46AB-9895-0BE0AF42E7BD}.SingleImage|Any CPU.Build.0 = SingleImage
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.CD_ROM|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.CD_ROM|Any CPU.Build.0 = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.SingleImage|Any CPU.ActiveCfg = Debug|Any CPU
+		{68BE2E31-5DF9-4E8E-A09E-C803F8DDD467}.SingleImage|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

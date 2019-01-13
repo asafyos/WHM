@@ -12,32 +12,33 @@
         <TabItem Header="השאלות">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition SharedSizeGroup="InputSize" Width="120*"/>
-                    <ColumnDefinition SharedSizeGroup="InputSize" Width="120*"/>
-                    <ColumnDefinition SharedSizeGroup="InputSize" Width="120"/>
-                    <ColumnDefinition SharedSizeGroup="InputSize" Width="120*"/>
-                    <ColumnDefinition SharedSizeGroup="InputSize" Width="120*"/>
-                    <ColumnDefinition Width="281*"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition SharedSizeGroup="InputSize" Width="Auto"/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition SharedSizeGroup="InputHeight"/>
                     <RowDefinition SharedSizeGroup="InputHeight"/>
                     <RowDefinition Height="227*"/>
                 </Grid.RowDefinitions>
-                <!--<TextBox x:Name="textBoxToolComp" Margin="5" FontSize="15" Grid.Column="0" Grid.ColumnSpan="2" />
-                            <TextBlock Grid.Column="0" IsHitTestVisible="False" TextWrapping="Wrap" Text="שם כלי" Margin="5" Foreground="DarkGray" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2">
-                                <TextBlock.Style>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Text, ElementName=textBoxSearchComp}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>-->
-                <TextBox x:Name="textBoxTakerComp" Margin="5" FontSize="15" Grid.Column="2" />
+                <TextBox x:Name="textBoxToolComp" Text="{Binding ToolInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" FontSize="15" Grid.Column="0" Grid.ColumnSpan="2" KeyUp="textBoxToolComp_KeyUp" />
+                <TextBlock Grid.Column="0" IsHitTestVisible="False" TextWrapping="Wrap" Text="שם כלי" Margin="5" Foreground="DarkGray" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=textBoxToolComp}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox x:Name="textBoxTakerComp" Text="{Binding LoanerName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" FontSize="15" Grid.Column="2" Width="100" KeyUp="textBoxTakerComp_KeyUp" />
                 <TextBlock Grid.Column="2" IsHitTestVisible="False" TextWrapping="Wrap" Text="שם משאיל" Margin="5" Foreground="DarkGray" FontSize="15" Padding="5,0,0,0">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -50,8 +51,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox x:Name="textBoxTeam" Margin="5" FontSize="15" Grid.Column="3" />
-                <TextBlock Grid.Column="3" IsHitTestVisible="False" TextWrapping="Wrap" Text="מספר קבוצה" Margin="5" Foreground="DarkGray" FontSize="15" Padding="3,0,0,0">
+                <TextBox x:Name="textBoxTeam" Text="{Binding TeamNum, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="4.8,5,4.6,4.6" FontSize="15" Grid.Column="3" LostFocus="textBoxTeam_LostFocus" />
+                <TextBlock Grid.Column="3" IsHitTestVisible="False" TextWrapping="Wrap" Text="מספר קבוצה" Margin="4.8,5,4.6,4.6" Foreground="DarkGray" FontSize="15" Padding="3,0,0,0">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -63,8 +64,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox x:Name="textBoxSearchComp" Margin="5" FontSize="15" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />
-                <TextBlock Grid.Column="0" IsHitTestVisible="False" TextWrapping="Wrap" Text="הקלד מילת חיפוש" Margin="5" Foreground="DarkGray" Grid.Row="1" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2">
+                <TextBox x:Name="textBoxSearchComp" Text="{Binding SearchTerm, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5,5.4,4.8,4.2" FontSize="15" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />
+                <TextBlock Grid.Column="0" IsHitTestVisible="False" TextWrapping="Wrap" Text="הקלד מילת חיפוש" Margin="4,5.4,6,4.2" Foreground="DarkGray" Grid.Row="1" FontSize="15" Padding="5,0,0,0" Grid.ColumnSpan="2">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -76,11 +77,20 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <Button x:Name="buttonLoanComp" Content="השאל" Grid.Column="4" Margin="5" FontSize="15"/>
-                <Button x:Name="buttonCompSearchName" Content="לפי שם" Grid.Column="2" Margin="5" FontSize="15" Grid.Row="1"/>
-                <Button x:Name="buttonCompSearchTool" Content="לפי כלי" Grid.Column="3" Margin="5" FontSize="15" Grid.Row="1"/>
-                <Button x:Name="buttonCompSearchTeam" Content="לפי קבוצה" Grid.Column="4" Margin="5" FontSize="15" Grid.Row="1"/>
-                <DataGrid x:Name="dataGridCompLoan" Margin="5" Grid.Row="2" Grid.ColumnSpan="6">
+                <Button x:Name="buttonLoanComp" Content="השאל" Grid.Column="4" Margin="5.4,5,5,4.6" FontSize="15"/>
+                <TextBlock x:Name="textBlockTeamName" Grid.Column="5" TextWrapping="Wrap" Text="{Binding TeamName}" Margin="5,5.4,4.8,4.2" Grid.Row="0" FontSize="15" Padding="0">
+                    <!--<TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=textBlockTeamName}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>-->
+                </TextBlock>
+                <DataGrid x:Name="dataGridCompLoan" Margin="5,4.8,4.6,5" Grid.Row="2" Grid.ColumnSpan="7">
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="שם" FontSize="15" MinWidth="100"/>
                         <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="קבוצה" FontSize="15" MinWidth="140"/>

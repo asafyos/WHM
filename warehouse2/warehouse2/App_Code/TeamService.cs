@@ -8,6 +8,8 @@ using System.Net;
 using System.IO;
 using System.Data.OleDb;
 using System.Data;
+using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace warehouse2 {
     class TeamService {
@@ -16,13 +18,15 @@ namespace warehouse2 {
         private const string FRC_URL = "http://www.thebluealliance.com/api/v3/teams/";
         private const string FINISH = "/simple";
         private const string END_OF_OUTPUT = "[END_OF_OUTPUT]";
+        private const int PAGE_SIZE = 500;
+        public static Thread MainThread { get; set; }
 
         static TeamService() {
             myConn = new OleDbConnection(Connect.GetConnectionStringTeams());
         }
 
         public static string getTeamName(int teamNumber) {
-            int page = teamNumber / 500;
+            int page = teamNumber / PAGE_SIZE;
             try {
                 WebRequest req = WebRequest.Create(FRC_URL + page + FINISH);
                 req.Headers.Add("X-TBA-Auth-Key", "IYzOdICVebpdvXKhrxwcpFVip66RadQzqPidfFimwwjHTnZehOLaTKb3UIaQVTxu");
@@ -43,11 +47,32 @@ namespace warehouse2 {
                     return END_OF_OUTPUT;
                 }
             } catch {
-                return getTeamNameOfline(teamNumber);
+                return getTeamNameOffline(teamNumber);
             }
             return null;
         }
-        private static string getTeamNameOfline(int teamNumber) {
+        private static bool addTeamMassive(int page) {
+            try {
+                WebRequest req = WebRequest.Create(FRC_URL + page + FINISH);
+                req.Headers.Add("X-TBA-Auth-Key", "IYzOdICVebpdvXKhrxwcpFVip66RadQzqPidfFimwwjHTnZehOLaTKb3UIaQVTxu");
+                Stream stream = req.GetResponse().GetResponseStream();
+                StreamReader reader = new StreamReader(stream);
+                string output = "";
+                while (!reader.EndOfStream) {
+                    output += reader.ReadLine();
+                }
+                if (output != "[]") {
+                    dynamic dyObj = JsonConvert.DeserializeObject(output);
+                    foreach (var data in dyObj) {
+                        addTeam(Convert.ToInt32(data.team_number), Convert.ToString(data.nickname));
+                    }
+                } else {
+                    return false;
+                }
+            } catch (Exception ex) { Console.WriteLine(ex.Message); }
+            return true;
+        }
+        private static string getTeamNameOffline(int teamNumber) {
             // TASK: Add offline teams
             object obj;
             try {
@@ -69,15 +94,15 @@ namespace warehouse2 {
                 return null;
         }
         public static void updateDB() {
-            delDB();
-            string teamName;
-            for (int teamNum = 1; true; teamNum++) {
-                teamName = getTeamName(teamNum);
-                if (teamName.Equals(END_OF_OUTPUT))
-                    break;
-                else {
-                    addTeam(teamNum, teamName);
+            if (getTeamName(1) != null) {
+                delDB();
+                for (int page = 0; true; page++) {
+                    if (!addTeamMassive(page))
+                        break;
                 }
+                MainThread.Join();
+                SharedData.GetInstans().refreshData(TYPE.FIRST);
+                MainWindow.mainWin.message("הורדת נתונים הושלמה");
             }
         }
         private static void delDB() {
@@ -104,6 +129,25 @@ namespace warehouse2 {
                 myConn.Open();
                 cmd.ExecuteNonQuery();
             } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
+        }
+        public static ObservableCollection<TeamDets> GetAllTeams() {
+            ObservableCollection<TeamDets> list = new ObservableCollection<TeamDets>();
+            OleDbCommand cmd = new OleDbCommand("GetAllTeams", myConn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            OleDbDataAdapter adapter = new OleDbDataAdapter();
+            adapter.SelectCommand = cmd;
+            DataSet ds = new DataSet();
+            try {
+                adapter.Fill(ds, "TeamsTbl");
+                ds.Tables["TeamsTbl"].PrimaryKey = new DataColumn[] { ds.Tables["TeamsTbl"].Columns["TeamNum"] };
+            } catch (Exception ex) { throw ex; }
+            foreach (DataRow row in ds.Tables[0].Rows) {
+                list.Add(new TeamDets {
+                    TeamName = row["TeamName"].ToString(),
+                    TeamNum = Convert.ToInt32(row["TeamNum"])
+                });
+            }
+            return list;
         }
     }
 }

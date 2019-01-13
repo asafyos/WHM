@@ -106,6 +106,7 @@ namespace warehouse2 {
             InitializeComponent();
             this.SharedDataIns = SharedData.GetInstans();
             RequsetTools = new ObservableCollection<ToolDets>();
+            SearchBarcode = null;
         }
 
 
@@ -194,8 +195,6 @@ namespace warehouse2 {
         }
 
         private void textBoxSearch_KeyUp(object sender, KeyEventArgs e) {
-            //MainWindow.mainWin.ManagerIn = !MainWindow.mainWin.ManagerIn;
-
             OnPropertyChanged("OutToolList");
         }
 

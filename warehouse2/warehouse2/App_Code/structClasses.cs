@@ -304,7 +304,7 @@ namespace warehouse2 {
                 OnPropertyChanged("Password");
             }
         }
-        
+
         public override bool Equals(object obj) {
 
             if (obj == null || GetType() != obj.GetType()) {
@@ -313,11 +313,29 @@ namespace warehouse2 {
 
             return (userName == ((ManagerDets)obj).userName && password == ((ManagerDets)obj).password);
         }
-        
+
         public override int GetHashCode() {
             // TODO: write your implementation of GetHashCode() here
             throw new NotImplementedException();
             return base.GetHashCode();
+        }
+    }
+    public class TeamDets : NotifObject {
+        private int teamNum;
+        private string teamName;
+
+        public int TeamNum {
+            get { return teamNum; }
+            set { teamNum = value;
+                OnPropertyChanged("TeamNum");
+            }
+        }
+        public string TeamName {
+            get { return teamName; }
+            set {
+                teamName = value;
+                OnPropertyChanged("TeamName");
+            }
         }
     }
 }

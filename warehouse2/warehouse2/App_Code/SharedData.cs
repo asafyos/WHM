@@ -16,7 +16,8 @@ namespace warehouse2 {
         MMBR,
         KIND,
         TOOL,
-        MNGR
+        MNGR,
+        FIRST
     }
 
 
@@ -43,6 +44,7 @@ namespace warehouse2 {
         ObservableCollection<KindDets> kindsList;
         ObservableCollection<ToolDets> toolsList;
         ObservableCollection<ManagerDets> managersList;
+        ObservableCollection<TeamDets> teamList;
         ManagerDets currentManager;
         MemberDets currentStorekeeper;
         ObservableCollection<DateTime> yDates;
@@ -122,6 +124,10 @@ namespace warehouse2 {
         public ObservableCollection<MemberDets> StorekeepersList {
             get { return new ObservableCollection<MemberDets>(membersList.Where((e) => e.GroupID == buildrsID)); }
         }
+        public ObservableCollection<TeamDets> TeamsList {
+            get { return this.teamList; }
+            set { this.teamList = value; }
+        }
         public ManagerDets CurrentManager {
             get {
                 if (this.currentManager == null) {
@@ -189,6 +195,9 @@ namespace warehouse2 {
             }
             if (type == TYPE.ALL || type == TYPE.MNGR) {
                 ManagersList = UserService.GetAllMenegers();
+            }
+            if (type == TYPE.ALL || type == TYPE.FIRST) {
+                //TeamsList = TeamService.GetAllTeams();
             }
             if (type == TYPE.ALL) {
                 setDates();

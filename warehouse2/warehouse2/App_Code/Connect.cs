@@ -14,8 +14,11 @@ namespace warehouse2 {
 #elif TEST
 #warning TEST is defined
         static string location = "C:\\Users\\USER\\Desktop\\wh\\App_Data\\";
+#elif PROD
+#warning PROD is defined
+        static string location = "C:\\Users\\USER\\Google Drive\\warehouse_updates\\Release\\App_Data\\";
 #else
-        static string location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("\\bin\\Debug", string.Empty) + "/App_Data/";
+        static string location = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("\\bin\\Debug", string.Empty) + "\\App_Data\\";
 #endif
 
         public Connect() { }

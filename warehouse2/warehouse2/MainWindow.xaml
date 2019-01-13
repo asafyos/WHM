@@ -24,8 +24,11 @@
                 <MenuItem Header="היכנס" Click="MenuItem_LogIn_Click" IsEnabled="{Binding ManagerIn, Converter={StaticResource boolInverter}}"/>
                 <MenuItem Header="התנתק" Click="MenuItem_LogOut_Click" IsEnabled="{Binding ManagerIn}"/>
             </MenuItem>
+            <MenuItem Header="נתונים">
+                <MenuItem Header="הורד קבוצות" Click="MenuItem_Teams_Click" />
+                <MenuItem Header="רענן" Click="MenuItem_Refresh_Click"/>    
+            </MenuItem>
             <MenuItem Header="עזרה"/>
-            <MenuItem Header="רענן" Click="MenuItem_Refresh_Click"/>
         </Menu>
         <TabControl x:Name="tabControl" Margin="0" Grid.Row="1">
             <TabItem Header="השאלות">

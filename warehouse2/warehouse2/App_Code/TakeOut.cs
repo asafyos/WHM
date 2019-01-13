@@ -82,6 +82,25 @@ namespace warehouse2 {
                 cmd.ExecuteNonQuery();
             } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
         }
+        private static void ReturnTool(LoanedTool tool, bool openConn) {
+            try {
+                OleDbCommand cmd = new OleDbCommand("ReturnTool", myConn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                OleDbParameter param;
+                param = cmd.Parameters.Add("@UserID", OleDbType.BSTR);
+                param.Direction = ParameterDirection.Input;
+                param.Value = tool.UserID;
+                param = cmd.Parameters.Add("@ToolID", OleDbType.BSTR);
+                param.Direction = ParameterDirection.Input;
+                param.Value = tool.ToolID;
+                param = cmd.Parameters.Add("@TakeDate", OleDbType.Date);
+                param.Direction = ParameterDirection.Input;
+                param.Value = tool.TakeTime;
+                if (openConn)
+                    myConn.Open();
+                cmd.ExecuteNonQuery();
+            } catch (Exception ex) { throw ex; } finally { if (openConn) myConn.Close(); }
+        }
         public static DataSet GetOverTakeTool() {
             OleDbCommand cmd = new OleDbCommand("GetOverTakeTool", myConn);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -116,6 +135,10 @@ namespace warehouse2 {
                 myConn.Open();
                 foreach (ToolDets tool in tools) {
                     if (tool.ToolID != -1) {
+                        List<LoanedTool> usedList = getUsedList(tool.ToolID);
+                        if (usedList.Count != 0) {
+                            ReturnTool(usedList[1], false);
+                        }
                         OleDbCommand cmd = new OleDbCommand("TakeOutTools", myConn);
                         cmd.CommandType = CommandType.StoredProcedure;
                         OleDbParameter param;
@@ -165,6 +188,9 @@ namespace warehouse2 {
                 ds.Tables["ToolsTakenTbl"].PrimaryKey = new DataColumn[] { ds.Tables["ToolsTakenTbl"].Columns["UserID"], ds.Tables["ToolsTakenTbl"].Columns["ToolID"] };
             } catch (Exception ex) { throw ex; }
             return ds;
+        }
+        private static List<LoanedTool> getUsedList(int toolID) {
+            return SharedData.GetInstans().OutToolList.Where((e) => e.ToolID == toolID).ToList();
         }
     }
 }

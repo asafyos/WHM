@@ -314,10 +314,5 @@ namespace warehouse2 {
                 }
             } catch (Exception ex) { throw ex; } finally { myConn.Close(); }
         }
-
-        public static bool isToolIn(int toolID) {
-
-            return false;
-        }
     }
 }
